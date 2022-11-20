@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using SearchServiceLSM.Service;
+using SearchServiceLSM.Utils;
+using System.Text.Json.Serialization;
 
 namespace SearchServiceLSM.Models
 {
@@ -26,6 +28,27 @@ namespace SearchServiceLSM.Models
             Weight = group.Weight;
             Name = group.Name;
             Description = group.Description;
+        }
+
+        public void CalculateWeight(string text, Dictionary<string, Entity> dict)
+        {
+            int nameWeight = WeightCalculator.GetWeight(Name, NameWeight, text);
+            int descriptionWeight = WeightCalculator.GetWeight(Description, DescriptionWeight, text);
+
+            Weight = nameWeight + descriptionWeight;
+
+            // Assign transitive weights to Mediums related to this Group
+            if (Weight > 0)
+            {
+                int tWeight = nameWeight / NameWeight * NameTWeight + descriptionWeight / DescriptionWeight * DescriptionTWeight;
+                foreach (var mediumId in Media)
+                {
+                    if (dict.ContainsKey(mediumId))
+                    {
+                        dict[mediumId].Weight = tWeight;
+                    }
+                }
+            }
         }
 
     }

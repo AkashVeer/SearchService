@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using SearchServiceLSM.Service;
+using SearchServiceLSM.Utils;
+using System.Text.Json.Serialization;
 
 namespace SearchServiceLSM.Models
 {
@@ -32,6 +34,16 @@ namespace SearchServiceLSM.Models
             Floor = obj.Floor;
             RoomNumber = obj.RoomNumber;
             Description = obj.Description;
+        }
+
+        public void CalculateWeight(string text)
+        {
+            Weight += WeightCalculator.GetWeight(Type, TypeWeight, text);
+            Weight += WeightCalculator.GetWeight(Name, NameWeight, text);
+            Weight += WeightCalculator.GetWeight(SerialNumber, SerialNumberWeight, text);
+            Weight += WeightCalculator.GetWeight(Floor, FloorWeight, text);
+            Weight += WeightCalculator.GetWeight(RoomNumber, RoomNumberWeight, text);
+            Weight += WeightCalculator.GetWeight(Description, DescriptionWeight, text);
         }
 
     }

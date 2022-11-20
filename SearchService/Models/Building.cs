@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using SearchServiceLSM.Service;
+using SearchServiceLSM.Utils;
+using System.Text.Json.Serialization;
 
 namespace SearchServiceLSM.Models
 {
@@ -31,6 +33,28 @@ namespace SearchServiceLSM.Models
             Name = building.Name;
             Description = building.Description;
             Locks = building.Locks;
+        }
+
+        public void CalculateWeight(string text, Dictionary<string, Entity> dict)
+        {
+            int shortCutWeight = WeightCalculator.GetWeight(ShortCut, ShortCutWeight, text);
+            int nameWeight = WeightCalculator.GetWeight(Name, NameWeight, text);
+            int descriptionWeight = WeightCalculator.GetWeight(Description, DescriptionWeight, text);
+
+            Weight = shortCutWeight + nameWeight + descriptionWeight;
+
+            // Assign transitive weights to Locks related to this Building
+            if (Weight > 0)
+            {
+                int tWeight = shortCutWeight / ShortCutWeight * ShortCutTWeight + nameWeight / NameWeight * NameTWeight + descriptionWeight / DescriptionWeight * DescriptionTWeight;
+                foreach (var lockId in Locks)
+                {
+                    if (dict.ContainsKey(lockId))
+                    {
+                        dict[lockId].Weight = tWeight;
+                    }
+                }
+            }
         }
 
     }
