@@ -1,4 +1,4 @@
-namespace SearchService
+namespace SearchServiceLSM
 {
     public class WeatherForecast
     {

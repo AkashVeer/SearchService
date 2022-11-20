@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace SearchService.Controllers
+namespace SearchServiceLSM.Controllers
 {
     [ApiController]
     [Route("[controller]")]

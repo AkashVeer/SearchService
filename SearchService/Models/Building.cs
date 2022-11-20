@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SearchService.Models
+namespace SearchServiceLSM.Models
 {
     public class Building : Entity
     {

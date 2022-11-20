@@ -1,4 +1,4 @@
-﻿namespace SearchService.Models
+﻿namespace SearchServiceLSM.Models
 {
     public class DataFile
     {
